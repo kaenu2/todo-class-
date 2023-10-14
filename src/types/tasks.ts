@@ -1,7 +1,6 @@
 export interface ITask {
-    id: number;
+    id: string;
     label: string;
-    created: string;
-    edit: boolean;
+    created: Date;
     completed: boolean;
 }

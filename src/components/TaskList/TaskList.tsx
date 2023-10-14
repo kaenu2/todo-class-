@@ -1,28 +1,36 @@
 import React, {Component, JSX} from 'react';
 
-import {ITask} from "../../types/tasks";
-
 import Task from "../Task";
+import {IProps, IState} from "./type";
 
-interface IProps {
-    tasks: ITask[]
-}
 
-export default class TaskList extends Component<IProps>{
-    constructor(props: IProps) {
-        super(props);
+
+export default class TaskList extends Component<IProps, IState>{
+
+    static defaultProps: IProps = {
+        tasks: [
+            {id: '1', label: 'Tasks not defined', created: new Date(), completed: false}
+        ],
+        onCompletedTasks: (): void => {},
+        onEditLabelTask: (): void => {},
+        onRemoveTask: (): void => {}
     }
+
     render(): JSX.Element {
-        const {tasks} = this.props;
+        const {tasks, onCompletedTasks, onRemoveTask, onEditLabelTask} = this.props;
         return (
             <ul className="todo-list">
                 {
                     tasks.map(task => {
-                        const {id, ...other} = task;
+                        const {id} = task;
                         return (
                             <Task
                                 key={id}
-                                {...other} />
+                                task={task}
+                                onCompletedTasks={onCompletedTasks}
+                                onRemoveTask={onRemoveTask}
+                                onEditLabelTask={onEditLabelTask}
+                            />
                         )
                     })
                 }
