@@ -1,7 +1,7 @@
-import React, { Component, JSX } from 'react'
-import { formatDistanceToNow } from 'date-fns'
+import React, { Component, JSX } from 'react';
+import { formatDistanceToNow } from 'date-fns';
 
-import { IProps, IState } from './type'
+import { IProps, IState } from './type';
 
 export default class Task extends Component<IProps, IState> {
   static defaultProps: IProps = {
@@ -9,7 +9,7 @@ export default class Task extends Component<IProps, IState> {
     onCompletedTasks: (): void => {},
     onRemoveTask: (): void => {},
     onEditLabelTask: (): void => {},
-  }
+  };
 
   timerId: any;
 
@@ -17,7 +17,7 @@ export default class Task extends Component<IProps, IState> {
     edit: false,
     value: this.props.task.label,
     created: 'just',
-  }
+  };
 
   componentDidMount(): void {
     this.timerId = setInterval(() => {
@@ -39,7 +39,7 @@ export default class Task extends Component<IProps, IState> {
     this.setState(({ edit }: IState): { edit: boolean } => {
       return {
         edit: !edit,
-      }
+      };
     });
   };
 
@@ -54,28 +54,28 @@ export default class Task extends Component<IProps, IState> {
     if (key === 'Enter') {
       onEditLabelTask(id, value);
       this.onEditTask();
-      return true
+      return true;
     }
     if (key === 'Escape') {
       this.onEditTask();
       this.setState({
         value: task.label,
       });
-      return false
+      return false;
     }
     return false;
-  }
+  };
 
   render(): JSX.Element {
     const { task, onCompletedTasks, onRemoveTask } = this.props;
-    const { id, label, created, completed } = task;
-    const { edit, value } = this.state
-    function onChangeClassName(completed: boolean, edit: boolean): string {
+    const { id, label, completed } = task;
+    const { edit, value } = this.state;
+    function onChangeClassName(completedValue: boolean, editValue: boolean): string {
       let className: string = '';
-      if (completed) {
+      if (completedValue) {
         className += ' completed';
       }
-      if (edit) {
+      if (editValue) {
         className += ' editing';
       }
       return className;
@@ -93,8 +93,7 @@ export default class Task extends Component<IProps, IState> {
           <button
             className="icon icon-destroy"
             onClick={(): void => onRemoveTask(id)}
-            aria-label={'Remove task' + label}
-          ></button>
+            aria-label={'Remove task' + label}></button>
         </div>
         {edit && (
           <input
@@ -107,6 +106,6 @@ export default class Task extends Component<IProps, IState> {
           />
         )}
       </li>
-    )
+    );
   }
 }

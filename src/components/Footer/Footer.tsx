@@ -1,15 +1,15 @@
-import React, { Component, JSX } from 'react'
+import React, { Component, JSX } from 'react';
 
-import { TasksFilter } from '../index'
+import { TasksFilter } from '../index';
 
-import { IProps, IState } from './type'
+import { IProps, IState } from './type';
 
 export default class Footer extends Component<IProps, IState> {
   static defaultProps: IProps = {
     onChangeSortValue: (): void => {},
     onClearCompletedTasks: (): void => {},
     tasksCount: 0,
-  }
+  };
 
   render(): JSX.Element {
     const { tasksCount, onClearCompletedTasks, onChangeSortValue } = this.props;
@@ -21,6 +21,6 @@ export default class Footer extends Component<IProps, IState> {
           Clear completed
         </button>
       </footer>
-    )
+    );
   }
 }

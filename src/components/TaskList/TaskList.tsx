@@ -1,8 +1,8 @@
-import React, { Component, JSX } from 'react'
+import React, { Component, JSX } from 'react';
 
-import Task from '../Task'
+import Task from '../Task';
 
-import { IProps, IState } from './type'
+import { IProps, IState } from './type';
 
 export default class TaskList extends Component<IProps, IState> {
   static defaultProps: IProps = {
@@ -10,7 +10,7 @@ export default class TaskList extends Component<IProps, IState> {
     onCompletedTasks: (): void => {},
     onEditLabelTask: (): void => {},
     onRemoveTask: (): void => {},
-  }
+  };
 
   render(): JSX.Element {
     const { tasks, onCompletedTasks, onRemoveTask, onEditLabelTask } = this.props;
@@ -26,9 +26,9 @@ export default class TaskList extends Component<IProps, IState> {
               onRemoveTask={onRemoveTask}
               onEditLabelTask={onEditLabelTask}
             />
-          )
+          );
         })}
       </ul>
-    )
+    );
   }
 }

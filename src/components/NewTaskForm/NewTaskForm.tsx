@@ -1,38 +1,38 @@
 import React, { Component, JSX } from 'react';
 
-import { IProps, IState } from './type'
+import { IProps, IState } from './type';
 
 export default class NewTaskForm extends Component<IProps, IState> {
   static defaultProps: IProps = {
     onCreateNewTask: (): void => {},
-  }
+  };
 
   state: IState = {
     value: '',
-  }
+  };
 
   onChangeValue = (newValue: string): void => {
-    if (newValue.trim()) {
-      this.setState((state: IState): { value: string } => {
+    if (newValue) {
+      this.setState((): { value: string } => {
         return {
           value: newValue,
-        }
+        };
       });
     }
-  }
+  };
 
   onSubmitForm = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const { value } = this.state;
     if (value) {
       this.props.onCreateNewTask(value);
-      this.setState((state: IState): { value: string } => {
+      this.setState((): { value: string } => {
         return {
           value: '',
-        }
+        };
       });
     }
-  }
+  };
 
   render(): JSX.Element {
     const { value } = this.state;
@@ -46,6 +46,6 @@ export default class NewTaskForm extends Component<IProps, IState> {
           autoFocus
         />
       </form>
-    )
+    );
   }
 }
