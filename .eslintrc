@@ -6,6 +6,7 @@
   "ignorePatterns": ["node_modules", "dist", "build"],
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "airbnb-typescript",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
@@ -21,9 +22,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier", "import"],
+  "plugins": ["react", "prettier", "import", "@typescript-eslint"],
   "rules": {
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],

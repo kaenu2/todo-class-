@@ -6,5 +6,3 @@ export interface IProps {
   onRemoveTask: (id: string) => void;
   onEditLabelTask: (id: string, value: string) => void;
 }
-
-export interface IState {}

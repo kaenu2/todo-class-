@@ -3,4 +3,3 @@ export interface IProps {
   onClearCompletedTasks: () => void;
   onChangeSortValue: (value: string) => void;
 }
-export interface IState {}

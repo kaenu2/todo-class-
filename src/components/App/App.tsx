@@ -3,9 +3,9 @@ import React, { Component, JSX } from 'react';
 import { Footer, NewTaskForm, TaskList } from '../index';
 import { ITask } from '../../types/tasks';
 
-import { IProps, IState } from './type';
+import { IState } from './type';
 
-export default class App extends Component<IProps, IState> {
+export default class App extends Component<unknown, IState> {
   state: IState = {
     tasks: [],
     sortValue: 'all',
@@ -73,12 +73,12 @@ export default class App extends Component<IProps, IState> {
   onSortTasks = (value: string): ITask[] => {
     const { tasks } = this.state;
     switch (value) {
-    case 'Active':
-      return tasks.filter((task) => !task.completed);
-    case 'Completed':
-      return tasks.filter((task) => task.completed);
-    default:
-      return tasks;
+      case 'Active':
+        return tasks.filter((task) => !task.completed);
+      case 'Completed':
+        return tasks.filter((task) => task.completed);
+      default:
+        return tasks;
     }
   };
 

@@ -71,7 +71,7 @@ export default class Task extends Component<IProps, IState> {
     const { id, label, completed } = task;
     const { edit, value } = this.state;
     function onChangeClassName(completedValue: boolean, editValue: boolean): string {
-      let className: string = '';
+      let className = '';
       if (completedValue) {
         className += ' completed';
       }

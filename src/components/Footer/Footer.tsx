@@ -2,9 +2,9 @@ import React, { Component, JSX } from 'react';
 
 import { TasksFilter } from '../index';
 
-import { IProps, IState } from './type';
+import { IProps } from './type';
 
-export default class Footer extends Component<IProps, IState> {
+export default class Footer extends Component<IProps> {
   static defaultProps: IProps = {
     onChangeSortValue: (): void => {},
     onClearCompletedTasks: (): void => {},

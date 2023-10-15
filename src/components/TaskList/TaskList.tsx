@@ -2,9 +2,9 @@ import React, { Component, JSX } from 'react';
 
 import Task from '../Task';
 
-import { IProps, IState } from './type';
+import { IProps } from './type';
 
-export default class TaskList extends Component<IProps, IState> {
+export default class TaskList extends Component<IProps> {
   static defaultProps: IProps = {
     tasks: [{ id: '1', label: 'Tasks not defined', created: new Date(), completed: false }],
     onCompletedTasks: (): void => {},

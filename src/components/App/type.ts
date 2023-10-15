@@ -4,5 +4,3 @@ export interface IState {
   tasks: ITask[];
   sortValue: string;
 }
-
-export interface IProps {}
