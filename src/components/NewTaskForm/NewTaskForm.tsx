@@ -12,26 +12,24 @@ export default class NewTaskForm extends Component<IProps, IState> {
   };
 
   onChangeValue = (newValue: string): void => {
-    if (newValue) {
-      this.setState((): { value: string } => {
-        return {
-          value: newValue,
-        };
-      });
-    }
+    this.setState((): { value: string } => {
+      return {
+        value: newValue,
+      };
+    });
   };
 
   onSubmitForm = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const { value } = this.state;
-    if (value) {
-      this.props.onCreateNewTask(value);
-      this.setState((): { value: string } => {
-        return {
-          value: '',
-        };
-      });
+    if (value.trim()) {
+      this.props.onCreateNewTask(value.trim());
     }
+    this.setState((): { value: string } => {
+      return {
+        value: '',
+      };
+    });
   };
 
   render(): JSX.Element {
