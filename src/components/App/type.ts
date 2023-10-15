@@ -1,10 +1,8 @@
-import {ITask} from "../../types/tasks";
+import { ITask } from '../../types/tasks'
 
 export interface IState {
-    tasks: ITask[];
-    sortValue: string;
+	tasks: ITask[];
+	sortValue: string;
 }
 
-export interface IProps {
-
-}
+export interface IProps {}
