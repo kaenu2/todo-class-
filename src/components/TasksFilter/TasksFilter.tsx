@@ -18,17 +18,17 @@ export default class TasksFilter extends Component<IProps, IState> {
 
 	onChangeBtnValue = (value: string): void => {
 		const { onChangeSortValue } = this.props;
-		this.setState({ buttonValue: value });
-    onChangeSortValue(value);
-  };
+    this.setState({ buttonValue: value });
+		onChangeSortValue(value);
+	};
 
 	render(): JSX.Element {
 		const { buttons, buttonValue } = this.state;
-		return (
+    return (
 			<ul className="filters">
 				{buttons.map(btn => {
 					const { label, id, value } = btn;
-          return (
+					return (
 						<li key={id}>
 							<button
 								className={buttonValue === value ? 'selected' : ''}

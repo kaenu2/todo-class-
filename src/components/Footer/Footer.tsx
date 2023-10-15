@@ -13,7 +13,7 @@ export default class Footer extends Component<IProps, IState> {
 
 	render(): JSX.Element {
 		const { tasksCount, onClearCompletedTasks, onChangeSortValue } = this.props;
-		return (
+    return (
 			<footer className="footer">
 				<span className="todo-count">{tasksCount} items left</span>
 				<TasksFilter onChangeSortValue={onChangeSortValue} />

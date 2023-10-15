@@ -13,7 +13,7 @@ export default class Task extends Component<IProps, IState> {
 
 	timerId: any;
 
-	state: IState = {
+  state: IState = {
 		edit: false,
 		value: this.props.task.label,
 		created: 'just',
@@ -24,16 +24,16 @@ export default class Task extends Component<IProps, IState> {
 			this.setState({
 				created: this.createCreatedRender(),
 			});
-		}, 2500);
-  }
+    }, 2500);
+	}
 
 	componentWillUnmount(): void {
 		clearInterval(this.timerId);
-	}
+  }
 
 	createCreatedRender(): string {
 		return formatDistanceToNow(this.props.task.created, { includeSeconds: true });
-	}
+  }
 
 	onEditTask = (): void => {
 		this.setState(({ edit }: IState): { edit: boolean } => {
@@ -41,45 +41,45 @@ export default class Task extends Component<IProps, IState> {
 				edit: !edit,
 			};
 		});
-  };
+	};
 
 	onChangeNewValue = (newValue: string): void => {
 		this.setState({
 			value: newValue,
 		});
-  };
+	};
 
 	onCheckKeyUp = (key: string, id: string, value: string): boolean => {
 		const { task, onEditLabelTask } = this.props;
-		if (key === 'Enter') {
+    if (key === 'Enter') {
 			onEditLabelTask(id, value);
-			this.onEditTask();
-      return true;
-    }
+      this.onEditTask();
+			return true;
+		}
 		if (key === 'Escape') {
 			this.onEditTask();
-			this.setState({
+      this.setState({
 				value: task.label,
 			});
-      return false;
-		}
+			return false;
+    }
 		return false;
-	};
+  };
 
 	render(): JSX.Element {
 		const { task, onCompletedTasks, onRemoveTask } = this.props;
-		const { id, label, created, completed } = task;
-    const { edit, value } = this.state;
-    function onChangeClassName(completed: boolean, edit: boolean): string {
+    const { id, label, created, completed } = task;
+		const { edit, value } = this.state;
+		function onChangeClassName(completed: boolean, edit: boolean): string {
 			let className: string = '';
-			if (completed) {
+      if (completed) {
 				className += ' completed';
-      }
+			}
 			if (edit) {
 				className += ' editing';
-      }
+			}
 			return className;
-		}
+    }
 
     return (
 			<li className={onChangeClassName(completed, edit)}>

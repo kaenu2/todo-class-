@@ -18,25 +18,25 @@ export default class NewTaskForm extends Component<IProps, IState> {
 					value: newValue,
 				};
 			});
-		}
+    }
 	};
 
 	onSubmitForm = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-		const { value } = this.state;
-    if (value) {
+    const { value } = this.state;
+		if (value) {
 			this.props.onCreateNewTask(value);
-			this.setState((state: IState): { value: string } => {
+      this.setState((state: IState): { value: string } => {
 				return {
 					value: '',
 				};
 			});
-		}
+    }
 	};
 
 	render(): JSX.Element {
 		const { value } = this.state;
-		return (
+    return (
 			<form onSubmit={this.onSubmitForm}>
 				<input
 					className="new-todo"

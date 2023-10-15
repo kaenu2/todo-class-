@@ -14,11 +14,11 @@ export default class TaskList extends Component<IProps, IState> {
 
 	render(): JSX.Element {
 		const { tasks, onCompletedTasks, onRemoveTask, onEditLabelTask } = this.props;
-		return (
+    return (
 			<ul className="todo-list">
 				{tasks.map(task => {
 					const { id } = task;
-          return (
+					return (
 						<Task
 							key={id}
 							task={task}

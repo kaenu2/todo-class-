@@ -3,7 +3,7 @@ import React, { Component, JSX } from 'react';
 import { Footer, NewTaskForm, TaskList } from '../index';
 import { ITask } from '../../types/tasks';
 
-import { IProps, IState } from './type'
+import { IProps, IState } from './type';
 
 export default class App extends Component<IProps, IState> {
 	state: IState = {
@@ -26,7 +26,7 @@ export default class App extends Component<IProps, IState> {
 				tasks: [...tasks, this.createTaskItem(value)],
 			};
 		});
-	};
+  };
 
 	onCompletedTasks = (id: string): void => {
 		this.setState(({ tasks }: IState): { tasks: ITask[] } => {
@@ -34,12 +34,12 @@ export default class App extends Component<IProps, IState> {
 				tasks: tasks.map(task => {
 					if (task.id === id) {
 						return { ...task, completed: !task.completed };
-					}
+          }
 					return task;
-				}),
+        }),
 			};
 		});
-	};
+  };
 
 	onRemoveTask = (id: string): void => {
 		this.setState(({ tasks }: IState): { tasks: ITask[] } => {
@@ -47,7 +47,7 @@ export default class App extends Component<IProps, IState> {
 				tasks: tasks.filter(task => task.id !== id),
 			};
 		});
-	};
+  };
 
 	onEditLabelTask = (id: string, value: string): void => {
 		this.setState(({ tasks }: IState): { tasks: ITask[] } => {
@@ -55,12 +55,12 @@ export default class App extends Component<IProps, IState> {
 				tasks: tasks.map(task => {
 					if (task.id === id) {
 						return { ...task, label: value };
-					}
+          }
 					return task;
-				}),
+        }),
 			};
 		});
-	};
+  };
 
 	onClearCompletedTasks = (): void => {
 		this.setState(({ tasks }: IState): { tasks: ITask[] } => {
@@ -68,31 +68,31 @@ export default class App extends Component<IProps, IState> {
 				tasks: tasks.filter(task => !task.completed),
 			};
 		});
-	};
+  };
 
 	onSortTasks = (value: string): ITask[] => {
 		const { tasks } = this.state;
-		switch (value) {
+    switch (value) {
 			case 'Active':
 				return tasks.filter(task => !task.completed);
-			case 'Completed':
+    case 'Completed':
 				return tasks.filter(task => task.completed);
-			default:
+    default:
 				return tasks;
-		}
+    }
 	};
 
 	onChangeSortValue = (value: string): void => {
 		this.setState({
 			sortValue: value,
 		});
-	};
+  };
 
 	render(): JSX.Element {
 		const { tasks, sortValue } = this.state;
-		const tasksCount = this.onSortTasks('Active').length;
-		const visibleTasks = this.onSortTasks(sortValue);
-		return (
+    const tasksCount = this.onSortTasks('Active').length;
+    const visibleTasks = this.onSortTasks(sortValue);
+    return (
 			<section className="todoapp">
 				<header className="header">
 					<h1>todos</h1>
