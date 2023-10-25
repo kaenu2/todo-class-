@@ -17,8 +17,8 @@ export default class App extends Component<unknown, IState> {
       created: new Date(),
       completed: false,
       label: label,
-      min,
-      sec,
+      min: min > 59 ? 0 : min,
+      sec: sec > 59 ? 0 : sec,
       timerId: 0,
     };
   };
