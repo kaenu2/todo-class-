@@ -19,6 +19,7 @@ export default class App extends Component<unknown, IState> {
       label: label,
       min,
       sec,
+      timerId: 0,
     };
   };
 
@@ -92,7 +93,7 @@ export default class App extends Component<unknown, IState> {
     });
   };
 
-  onUpdateSec = (id: string): void => {
+  onUpdateTimeValue = (id: string): void => {
     this.setState(({ tasks }): { tasks: ITask[] } => {
       return {
         tasks: tasks.map((task): ITask => {
@@ -105,6 +106,35 @@ export default class App extends Component<unknown, IState> {
           return task;
         }),
       };
+    });
+  };
+
+  onPlayTimer = (id: string): void => {
+    const { tasks } = this.state;
+    this.setState({
+      tasks: tasks.map((task): ITask => {
+        if (task.id === id) {
+          return {
+            ...task,
+            timerId: task.timerId ? task.timerId : setInterval(() => this.onUpdateTimeValue(id), 1000),
+          };
+        }
+        return task;
+      }),
+    });
+  };
+
+  onStopTimer = (id: string): void => {
+    const { tasks } = this.state;
+    const taskId = tasks.filter((task) => task.id === id)[0];
+    clearInterval(taskId.timerId);
+    this.setState({
+      tasks: tasks.map((elem): ITask => {
+        if (elem.id === id) {
+          return { ...elem, timerId: 0 };
+        }
+        return elem;
+      }),
     });
   };
 
@@ -124,7 +154,9 @@ export default class App extends Component<unknown, IState> {
             onCompletedTasks={this.onCompletedTasks}
             onRemoveTask={this.onRemoveTask}
             onEditLabelTask={this.onEditLabelTask}
-            onUpdateSec={this.onUpdateSec}
+            onUpdateTimeValue={this.onUpdateTimeValue}
+            onPlayTimer={this.onPlayTimer}
+            onStopTimer={this.onStopTimer}
           />
           <Footer
             tasksCount={tasksCount}

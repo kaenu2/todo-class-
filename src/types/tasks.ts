@@ -5,4 +5,5 @@ export interface ITask {
   completed: boolean;
   min: number;
   sec: number;
+  timerId: number | NodeJS.Timer;
 }

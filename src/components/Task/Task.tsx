@@ -5,34 +5,35 @@ import { IProps, IState } from './type';
 
 export default class Task extends Component<IProps, IState> {
   static defaultProps: IProps = {
-    task: { id: '1', label: 'Tasks not defined', created: new Date(), completed: false, sec: 0, min: 0 },
+    task: { id: '1', label: 'Tasks not defined', created: new Date(), completed: false, sec: 0, min: 0, timerId: 0 },
     onCompletedTasks: (): void => {},
     onRemoveTask: (): void => {},
     onEditLabelTask: (): void => {},
-    onUpdateSec: (): void => {},
+    onUpdateTimeValue: (): void => {},
+    onPlayTimer: (): void => {},
+    onStopTimer: (): void => {},
   };
 
   state: IState = {
     edit: false,
     value: this.props.task.label,
     created: 'just',
-    timerId: 0,
-    taskTimerId: 0,
   };
 
-  componentDidMount(): void {
-    this.setState({
-      timerId: setInterval((): void => {
-        this.setState({
-          created: this.createCreatedRender(),
-        });
-      }, 2500),
-    });
+  componentDidMount() {
+    this.onUpdateCreated();
   }
 
-  componentWillUnmount(): void {
-    clearInterval(this.state.timerId);
-    clearInterval(this.state.taskTimerId);
+  componentDidUpdate(prevProps: Readonly<IProps>) {
+    if (prevProps !== this.props) {
+      this.onUpdateCreated();
+    }
+  }
+
+  onUpdateCreated() {
+    this.setState({
+      created: this.createCreatedRender(),
+    });
   }
 
   createCreatedRender(): string {
@@ -85,27 +86,10 @@ export default class Task extends Component<IProps, IState> {
     return value < 10 ? `0${value}` : String(value);
   }
 
-  onPlayTimer(id: string, timerId: number | NodeJS.Timer): void {
-    const { onUpdateSec } = this.props;
-    if (timerId) {
-      return;
-    }
-    this.setState({
-      taskTimerId: setInterval((): void => {
-        onUpdateSec(id);
-      }, 1000),
-    });
-  }
-
-  onStopTimer(taskTimer: number | NodeJS.Timer): void {
-    clearInterval(taskTimer);
-    this.setState({ taskTimerId: 0 });
-  }
-
   render(): JSX.Element {
-    const { task, onCompletedTasks, onRemoveTask } = this.props;
+    const { task, onCompletedTasks, onRemoveTask, onPlayTimer, onStopTimer } = this.props;
     const { id, label, completed, min, sec } = task;
-    const { edit, value, taskTimerId } = this.state;
+    const { edit, value } = this.state;
 
     return (
       <li className={this.onChangeClassName(completed, edit)}>
@@ -117,11 +101,13 @@ export default class Task extends Component<IProps, IState> {
               <button
                 className="icon icon-play"
                 aria-label="Start timer"
-                onClick={(): void => this.onPlayTimer(id, taskTimerId)}></button>
+                onClick={(): void => {
+                  onPlayTimer(id);
+                }}></button>
               <button
                 className="icon icon-pause"
                 aria-label="Pause timer"
-                onClick={(): void => this.onStopTimer(taskTimerId)}></button>
+                onClick={(): void => onStopTimer(id)}></button>
               {this.onCheckNumber(min)}:{this.onCheckNumber(sec)}
             </span>
             <span className="description">created {this.state.created}</span>
@@ -129,7 +115,10 @@ export default class Task extends Component<IProps, IState> {
           <button className="icon icon-edit" onClick={this.onEditTask} aria-label={'Editing task' + label}></button>
           <button
             className="icon icon-destroy"
-            onClick={(): void => onRemoveTask(id)}
+            onClick={(): void => {
+              onStopTimer(id);
+              onRemoveTask(id);
+            }}
             aria-label={'Remove task' + label}></button>
         </div>
         {edit && (
