@@ -3,4 +3,6 @@ export interface ITask {
   label: string;
   created: Date;
   completed: boolean;
+  min: number;
+  sec: number;
 }

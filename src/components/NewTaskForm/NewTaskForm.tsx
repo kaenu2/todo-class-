@@ -8,41 +8,46 @@ export default class NewTaskForm extends Component<IProps, IState> {
   };
 
   state: IState = {
-    value: '',
-  };
-
-  onChangeValue = (newValue: string): void => {
-    this.setState((): { value: string } => {
-      return {
-        value: newValue,
-      };
-    });
+    valueTask: '',
+    valueMin: '',
+    valueSec: '',
   };
 
   onSubmitForm = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const { value } = this.state;
-    if (value.trim()) {
-      this.props.onCreateNewTask(value.trim());
+    const { valueTask, valueSec, valueMin } = this.state;
+    if (valueTask.trim()) {
+      this.props.onCreateNewTask(valueTask.trim(), Number(valueMin), Number(valueSec));
     }
-    this.setState((): { value: string } => {
-      return {
-        value: '',
-      };
-    });
+    this.setState({ valueTask: '', valueMin: '', valueSec: '' });
   };
 
   render(): JSX.Element {
-    const { value } = this.state;
+    const { valueTask, valueSec, valueMin } = this.state;
     return (
-      <form onSubmit={this.onSubmitForm}>
+      <form className="new-todo-form" onSubmit={this.onSubmitForm}>
         <input
           className="new-todo"
-          placeholder="What needs to be done?"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => this.onChangeValue(e.target.value)}
-          value={value}
+          value={valueTask}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => this.setState({ valueTask: e.target.value })}
+          placeholder="Task"
           autoFocus
         />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Min"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ valueMin: e.target.value })}
+          value={valueMin}
+          autoFocus
+        />
+        <input
+          className="new-todo-form__timer"
+          placeholder="Sec"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ valueSec: e.target.value })}
+          value={valueSec}
+          autoFocus
+        />
+        <button style={{ display: 'none' }}></button>
       </form>
     );
   }

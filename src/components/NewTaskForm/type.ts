@@ -1,6 +1,8 @@
 export interface IProps {
-  onCreateNewTask: (value: string) => void;
+  onCreateNewTask: (value: string, min: number, sec: number) => void;
 }
 export interface IState {
-  value: string;
+  valueTask: string;
+  valueMin: string;
+  valueSec: string;
 }

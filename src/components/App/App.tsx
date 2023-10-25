@@ -11,19 +11,23 @@ export default class App extends Component<unknown, IState> {
     sortValue: 'all',
   };
 
-  createTaskItem = (label: string): ITask => {
+  createTaskItem = (label: string, min: number, sec: number): ITask => {
     return {
       id: new Date().toString() + Math.random() * 100,
       created: new Date(),
       completed: false,
       label: label,
+      min,
+      sec,
     };
   };
 
-  onCreateNewTask = (value: string): void => {
+  onCreateNewTask = (value: string, min: number, sec: number): void => {
+    const newMin: number = isNaN(min) ? 0 : min;
+    const newSec: number = isNaN(sec) ? 0 : sec;
     this.setState(({ tasks }: IState): { tasks: ITask[] } => {
       return {
-        tasks: [...tasks, this.createTaskItem(value)],
+        tasks: [...tasks, this.createTaskItem(value, newMin, newSec)],
       };
     });
   };
@@ -31,7 +35,7 @@ export default class App extends Component<unknown, IState> {
   onCompletedTasks = (id: string): void => {
     this.setState(({ tasks }: IState): { tasks: ITask[] } => {
       return {
-        tasks: tasks.map((task) => {
+        tasks: tasks.map((task): ITask => {
           if (task.id === id) {
             return { ...task, completed: !task.completed };
           }
@@ -44,7 +48,7 @@ export default class App extends Component<unknown, IState> {
   onRemoveTask = (id: string): void => {
     this.setState(({ tasks }: IState): { tasks: ITask[] } => {
       return {
-        tasks: tasks.filter((task) => task.id !== id),
+        tasks: tasks.filter((task): boolean => task.id !== id),
       };
     });
   };
@@ -52,7 +56,7 @@ export default class App extends Component<unknown, IState> {
   onEditLabelTask = (id: string, value: string): void => {
     this.setState(({ tasks }: IState): { tasks: ITask[] } => {
       return {
-        tasks: tasks.map((task) => {
+        tasks: tasks.map((task): ITask => {
           if (task.id === id) {
             return { ...task, label: value };
           }
@@ -88,6 +92,22 @@ export default class App extends Component<unknown, IState> {
     });
   };
 
+  onUpdateSec = (id: string): void => {
+    this.setState(({ tasks }): { tasks: ITask[] } => {
+      return {
+        tasks: tasks.map((task): ITask => {
+          if (task.id === id) {
+            if (task.sec < 59) {
+              return { ...task, sec: task.sec + 1 };
+            }
+            return { ...task, sec: 0, min: task.min + 1 };
+          }
+          return task;
+        }),
+      };
+    });
+  };
+
   render(): JSX.Element {
     const { sortValue } = this.state;
     const tasksCount = this.onSortTasks('Active').length;
@@ -104,6 +124,7 @@ export default class App extends Component<unknown, IState> {
             onCompletedTasks={this.onCompletedTasks}
             onRemoveTask={this.onRemoveTask}
             onEditLabelTask={this.onEditLabelTask}
+            onUpdateSec={this.onUpdateSec}
           />
           <Footer
             tasksCount={tasksCount}
