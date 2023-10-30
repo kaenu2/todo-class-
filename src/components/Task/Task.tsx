@@ -25,6 +25,11 @@ export default class Task extends Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>) {
+    const { task, onStopTimer } = this.props;
+    const { id, completed } = task;
+    if (prevProps.task.completed !== completed) {
+      onStopTimer(id);
+    }
     if (prevProps !== this.props) {
       this.onUpdateCreated();
     }
@@ -100,6 +105,7 @@ export default class Task extends Component<IProps, IState> {
             <span className="description">
               <button
                 className="icon icon-play"
+                disabled={completed}
                 aria-label="Start timer"
                 onClick={(): void => {
                   onPlayTimer(id);
@@ -107,6 +113,7 @@ export default class Task extends Component<IProps, IState> {
               <button
                 className="icon icon-pause"
                 aria-label="Pause timer"
+                disabled={completed}
                 onClick={(): void => onStopTimer(id)}></button>
               {this.onCheckNumber(min)}:{this.onCheckNumber(sec)}
             </span>

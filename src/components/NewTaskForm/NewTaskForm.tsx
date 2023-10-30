@@ -38,6 +38,9 @@ export default class NewTaskForm extends Component<IProps, IState> {
           placeholder="Min"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ valueMin: e.target.value })}
           value={valueMin}
+          type="number"
+          min={0}
+          max={59}
           autoFocus
         />
         <input
@@ -45,6 +48,9 @@ export default class NewTaskForm extends Component<IProps, IState> {
           placeholder="Sec"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ valueSec: e.target.value })}
           value={valueSec}
+          min={0}
+          max={59}
+          type="number"
           autoFocus
         />
         <button style={{ display: 'none' }}></button>

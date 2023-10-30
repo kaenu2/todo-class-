@@ -20,6 +20,13 @@ button {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
 button::-moz-focus-inner {
   border: none;
 }
@@ -305,6 +312,10 @@ body {
   font-size: 18px;
   width: 18px;
   height: 18px;
+}
+
+.todo-list li .icon-pause {
+  margin: 0 15px 0 5px;
 }
 
 .todo-list li .icon-play {
