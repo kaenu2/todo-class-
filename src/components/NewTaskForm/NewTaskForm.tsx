@@ -1,60 +1,63 @@
-import React, { Component, JSX } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { IProps, IState } from './type';
+import { HeaderContext } from '../../contexts';
 
-export default class NewTaskForm extends Component<IProps, IState> {
-  static defaultProps: IProps = {
-    onCreateNewTask: (): void => {},
-  };
+export const NewTaskForm = () => {
+  const { onCreateNewTask } = useContext(HeaderContext);
+  const [valueTask, setValueTask] = useState('');
+  const [valueMin, setValueMin] = useState('');
+  const [valueSec, setValueSec] = useState('');
 
-  state: IState = {
-    valueTask: '',
-    valueMin: '',
-    valueSec: '',
-  };
-
-  onSubmitForm = (e: React.FormEvent<HTMLFormElement>): void => {
+  const onSubmitForm = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const { valueTask, valueSec, valueMin } = this.state;
     if (valueTask.trim()) {
-      this.props.onCreateNewTask(valueTask.trim(), Number(valueMin), Number(valueSec));
+      onCreateNewTask(valueTask.trim(), Number(valueMin), Number(valueSec));
     }
-    this.setState({ valueTask: '', valueMin: '', valueSec: '' });
+    setValueMin('');
+    setValueTask('');
+    setValueSec('');
   };
 
-  render(): JSX.Element {
-    const { valueTask, valueSec, valueMin } = this.state;
-    return (
-      <form className="new-todo-form" onSubmit={this.onSubmitForm}>
-        <input
-          className="new-todo"
-          value={valueTask}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => this.setState({ valueTask: e.target.value })}
-          placeholder="Task"
-          autoFocus
-        />
-        <input
-          className="new-todo-form__timer"
-          placeholder="Min"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ valueMin: e.target.value })}
-          value={valueMin}
-          type="number"
-          min={0}
-          max={59}
-          autoFocus
-        />
-        <input
-          className="new-todo-form__timer"
-          placeholder="Sec"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setState({ valueSec: e.target.value })}
-          value={valueSec}
-          min={0}
-          max={59}
-          type="number"
-          autoFocus
-        />
-        <button style={{ display: 'none' }}></button>
-      </form>
-    );
-  }
-}
+  const onChangeLabelValue = (value: string) => {
+    setValueTask(value);
+  };
+  const onChangeMinValue = (value: string) => {
+    setValueMin(value);
+  };
+  const onChangeSecValue = (value: string) => {
+    setValueSec(value);
+  };
+
+  return (
+    <form className="new-todo-form" onSubmit={onSubmitForm}>
+      <input
+        className="new-todo"
+        value={valueTask}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => onChangeLabelValue(e.target.value)}
+        placeholder="Task"
+        autoFocus
+      />
+      <input
+        className="new-todo-form__timer"
+        placeholder="Min"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeMinValue(e.target.value)}
+        value={valueMin}
+        type="number"
+        min={0}
+        max={59}
+        autoFocus
+      />
+      <input
+        className="new-todo-form__timer"
+        placeholder="Sec"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeSecValue(e.target.value)}
+        value={valueSec}
+        min={0}
+        max={59}
+        type="number"
+        autoFocus
+      />
+      <button style={{ display: 'none' }}></button>
+    </form>
+  );
+};

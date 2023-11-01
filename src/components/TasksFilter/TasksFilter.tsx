@@ -1,44 +1,33 @@
-import React, { Component, JSX } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { IProps, IState } from './type';
+import { FooterContext } from '../../contexts';
 
-export default class TasksFilter extends Component<IProps, IState> {
-  static defaultProps: IProps = {
-    onChangeSortValue: (): void => {},
-  };
+export const TasksFilter = () => {
+  const [buttons] = useState([
+    { id: 1, label: 'All', value: 'All' },
+    { id: 2, label: 'Active', value: 'Active' },
+    { id: 3, label: 'Completed', value: 'Completed' },
+  ]);
+  const [buttonValue, setButtonValue] = useState('All');
+  const { onChangeSortValue } = useContext(FooterContext);
 
-  state: IState = {
-    buttons: [
-      { id: 1, label: 'All', value: 'All' },
-      { id: 2, label: 'Active', value: 'Active' },
-      { id: 3, label: 'Completed', value: 'Completed' },
-    ],
-    buttonValue: 'All',
-  };
-
-  onChangeBtnValue = (value: string): void => {
-    const { onChangeSortValue } = this.props;
-    this.setState({ buttonValue: value });
+  const onChangeBtnValue = (value: string): void => {
+    setButtonValue(value);
     onChangeSortValue(value);
   };
 
-  render(): JSX.Element {
-    const { buttons, buttonValue } = this.state;
-    return (
-      <ul className="filters">
-        {buttons.map((btn) => {
-          const { label, id, value } = btn;
-          return (
-            <li key={id}>
-              <button
-                className={buttonValue === value ? 'selected' : ''}
-                onClick={(): void => this.onChangeBtnValue(value)}>
-                {label}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    );
-  }
-}
+  return (
+    <ul className="filters">
+      {buttons.map((btn) => {
+        const { label, id, value } = btn;
+        return (
+          <li key={id}>
+            <button className={buttonValue === value ? 'selected' : ''} onClick={(): void => onChangeBtnValue(value)}>
+              {label}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};

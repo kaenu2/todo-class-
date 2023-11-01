@@ -1,17 +1,14 @@
-import React, { Component, JSX } from 'react';
+import React, { useState } from 'react';
 
 import { Footer, NewTaskForm, TaskList } from '../index';
 import { ITask } from '../../types/tasks';
+import { FooterContext, HeaderContext, TaskContext } from '../../contexts';
 
-import { IState } from './type';
+export const App = () => {
+  const [tasks, setTasks] = useState<[] | ITask[]>([]);
+  const [sortValue, setSortValue] = useState('all');
 
-export default class App extends Component<unknown, IState> {
-  state: IState = {
-    tasks: [],
-    sortValue: 'all',
-  };
-
-  createTaskItem = (label: string, min: number, sec: number): ITask => {
+  const createTaskItem = (label: string, min: number, sec: number): ITask => {
     return {
       id: new Date().toString() + Math.random() * 100,
       created: new Date(),
@@ -23,60 +20,39 @@ export default class App extends Component<unknown, IState> {
     };
   };
 
-  onCreateNewTask = (value: string, min: number, sec: number): void => {
+  const onCreateNewTask = (value: string, min: number, sec: number): void => {
     const newMin: number = isNaN(min) ? 0 : min;
     const newSec: number = isNaN(sec) ? 0 : sec;
-    this.setState(({ tasks }: IState): { tasks: ITask[] } => {
-      return {
-        tasks: [...tasks, this.createTaskItem(value, newMin, newSec)],
-      };
+    setTasks((prevState) => {
+      return [...prevState, createTaskItem(value, newMin, newSec)];
     });
   };
 
-  onCompletedTasks = (id: string): void => {
-    this.setState(({ tasks }: IState): { tasks: ITask[] } => {
-      return {
-        tasks: tasks.map((task): ITask => {
-          if (task.id === id) {
-            return { ...task, completed: !task.completed };
-          }
-          return task;
-        }),
-      };
-    });
+  const onCompletedTasks = (id: string): void => {
+    setTasks((prevState) =>
+      prevState.map((task): ITask => {
+        return task.id === id ? { ...task, completed: !task.completed } : task;
+      })
+    );
   };
 
-  onRemoveTask = (id: string): void => {
-    this.setState(({ tasks }: IState): { tasks: ITask[] } => {
-      return {
-        tasks: tasks.filter((task): boolean => task.id !== id),
-      };
-    });
+  const onRemoveTask = (id: string): void => {
+    setTasks((prevState) => prevState.filter((task) => task.id !== id));
   };
 
-  onEditLabelTask = (id: string, value: string): void => {
-    this.setState(({ tasks }: IState): { tasks: ITask[] } => {
-      return {
-        tasks: tasks.map((task): ITask => {
-          if (task.id === id) {
-            return { ...task, label: value };
-          }
-          return task;
-        }),
-      };
-    });
+  const onEditLabelTask = (id: string, value: string): void => {
+    setTasks((prevState) =>
+      prevState.map((task): ITask => {
+        return task.id === id ? { ...task, label: value } : task;
+      })
+    );
   };
 
-  onClearCompletedTasks = (): void => {
-    this.setState(({ tasks }: IState): { tasks: ITask[] } => {
-      return {
-        tasks: tasks.filter((task) => !task.completed),
-      };
-    });
+  const onClearCompletedTasks = (): void => {
+    setTasks((prevState) => prevState.filter((task) => !task.completed));
   };
 
-  onSortTasks = (value: string): ITask[] => {
-    const { tasks } = this.state;
+  const onSortTasks = (value: string): ITask[] => {
     switch (value) {
       case 'Active':
         return tasks.filter((task) => !task.completed);
@@ -87,84 +63,85 @@ export default class App extends Component<unknown, IState> {
     }
   };
 
-  onChangeSortValue = (value: string): void => {
-    this.setState({
-      sortValue: value,
-    });
+  const onChangeSortValue = (value: string): void => {
+    setSortValue(value);
   };
 
-  onUpdateTimeValue = (id: string): void => {
-    this.setState(({ tasks }): { tasks: ITask[] } => {
-      return {
-        tasks: tasks.map((task): ITask => {
-          if (task.id === id) {
-            if (task.sec < 59) {
-              return { ...task, sec: task.sec + 1 };
-            }
-            return { ...task, sec: 0, min: task.min + 1 };
+  const onUpdateTimeValue = (id: string): void => {
+    setTasks((prevState) => {
+      return prevState.map((task): ITask => {
+        if (task.id === id) {
+          if (task.sec < 59) {
+            return { ...task, sec: task.sec + 1 };
           }
-          return task;
-        }),
-      };
+          return { ...task, sec: 0, min: task.min + 1 };
+        }
+        return task;
+      });
     });
   };
 
-  onPlayTimer = (id: string): void => {
-    const { tasks } = this.state;
-    this.setState({
-      tasks: tasks.map((task): ITask => {
+  const onPlayTimer = (id: string): void => {
+    setTasks((prevState) => {
+      return prevState.map((task): ITask => {
         if (task.id === id) {
           return {
             ...task,
-            timerId: task.timerId ? task.timerId : setInterval(() => this.onUpdateTimeValue(id), 1000),
+            timerId: task.timerId ? task.timerId : setInterval(() => onUpdateTimeValue(id), 1000),
           };
         }
         return task;
-      }),
+      });
     });
   };
 
-  onStopTimer = (id: string): void => {
-    const { tasks } = this.state;
+  const onStopTimer = (id: string): void => {
     const taskId = tasks.filter((task) => task.id === id)[0];
     clearInterval(taskId.timerId);
-    this.setState({
-      tasks: tasks.map((elem): ITask => {
-        if (elem.id === id) {
-          return { ...elem, timerId: 0 };
-        }
-        return elem;
-      }),
-    });
+    setTasks((prevState) =>
+      prevState.map((elem): ITask => {
+        return elem.id === id ? { ...elem, timerId: 0 } : elem;
+      })
+    );
   };
 
-  render(): JSX.Element {
-    const { sortValue } = this.state;
-    const tasksCount = this.onSortTasks('Active').length;
-    const visibleTasks = this.onSortTasks(sortValue);
-    return (
-      <section className="todoapp">
+  const tasksCount = onSortTasks('Active').length;
+  const visibleTasks = onSortTasks(sortValue);
+
+  const tasksContextValue = {
+    tasks: visibleTasks,
+    onCompletedTasks,
+    onRemoveTask,
+    onEditLabelTask,
+    onUpdateTimeValue,
+    onPlayTimer,
+    onStopTimer,
+  };
+  const footerContextValue = {
+    tasksCount,
+    onClearCompletedTasks,
+    onChangeSortValue,
+  };
+  const headerContextValue = {
+    onCreateNewTask,
+  };
+
+  return (
+    <section className="todoapp">
+      <HeaderContext.Provider value={headerContextValue}>
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm onCreateNewTask={this.onCreateNewTask} />
+          <NewTaskForm />
         </header>
-        <section className="main">
-          <TaskList
-            tasks={visibleTasks}
-            onCompletedTasks={this.onCompletedTasks}
-            onRemoveTask={this.onRemoveTask}
-            onEditLabelTask={this.onEditLabelTask}
-            onUpdateTimeValue={this.onUpdateTimeValue}
-            onPlayTimer={this.onPlayTimer}
-            onStopTimer={this.onStopTimer}
-          />
-          <Footer
-            tasksCount={tasksCount}
-            onClearCompletedTasks={this.onClearCompletedTasks}
-            onChangeSortValue={this.onChangeSortValue}
-          />
-        </section>
+      </HeaderContext.Provider>
+      <section className="main">
+        <TaskContext.Provider value={tasksContextValue}>
+          <TaskList />
+        </TaskContext.Provider>
+        <FooterContext.Provider value={footerContextValue}>
+          <Footer />
+        </FooterContext.Provider>
       </section>
-    );
-  }
-}
+    </section>
+  );
+};
